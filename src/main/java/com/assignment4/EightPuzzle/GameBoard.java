@@ -112,12 +112,6 @@ public class GameBoard implements Comparable<GameBoard>{
          */
     }
 
-    public boolean compareTo(GameBoard that){
-        /*
-         * Your code here
-         */
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

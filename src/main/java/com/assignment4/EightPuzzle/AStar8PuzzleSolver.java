@@ -1,7 +1,7 @@
 package com.assignment4.EightPuzzle;
 import java.util.*;
 
-public class AStar8PuzzleSolver {
+public class AStar8PuzzleSolver implements EightPuzzleSolver{
 
     enum solvedStatus{
         SOLVED, NOT_POSSIBLE, NOT_EXECUTED
@@ -9,9 +9,9 @@ public class AStar8PuzzleSolver {
 
     private GameBoard initialBoardState;
     private GameBoard goalBoardState;
-    BinaryHeap<GameBoard> minPQ;
+    BinaryHeap<GameBoardPQEntry> minPQ;
     private Map<GameBoard, GameBoard> predecessors;
-    private GameBoard current;
+    private GameBoardPQEntry current;
     private solvedStatus solved;
 
     // You need to decide what data structure to use to store the visited nodes, either a 
@@ -29,7 +29,7 @@ public class AStar8PuzzleSolver {
 
     public void printSolution(){
         if(solved == solvedStatus.SOLVED){
-            for(GameBoard board : reconstructPath(current)){
+            for(GameBoard board : reconstructPath(current.board)){
                 System.out.println(board);
             }
         }
@@ -37,14 +37,14 @@ public class AStar8PuzzleSolver {
 
     public Iterable<GameBoard> solution(){
         if(solved == solvedStatus.SOLVED){
-            return reconstructPath(current);
+            return reconstructPath(current.board);
         }
         return new ArrayList<GameBoard>();
     }
 
     public long numberMoves(){
         if(solved == solvedStatus.SOLVED){
-            return reconstructPath(current).spliterator().getExactSizeIfKnown() - 1;
+            return reconstructPath(current.board).spliterator().getExactSizeIfKnown() - 1;
         }
         return -1;
     }
@@ -64,7 +64,7 @@ public class AStar8PuzzleSolver {
     }
 
     private boolean solutionReached(){
-        return current.equals(goalBoardState);
+        return current.board.equals(goalBoardState);
     }
 
     public solvedStatus status(){
@@ -82,5 +82,24 @@ public class AStar8PuzzleSolver {
         }
         Collections.reverse(path);
         return path;
+    }
+
+    private class GameBoardPQEntry implements Comparable<GameBoardPQEntry>{
+        public GameBoard board;
+        public int priority;
+        public int gScore;
+        public int hScore;
+        
+        public GameBoardPQEntry(GameBoard board, int gScore){
+            this.board = board;
+            this.gScore = gScore;
+            this.hScore = board.hamming();
+            this.priority = gScore + hScore;
+        }
+
+        @Override
+        public int compareTo(GameBoardPQEntry o) {
+            return this.priority - o.priority;
+        }
     }
 }
