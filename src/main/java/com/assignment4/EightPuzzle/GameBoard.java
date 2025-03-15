@@ -37,6 +37,7 @@ public class GameBoard implements Comparable<GameBoard>{
     //Useful to access the empty square in constant time
     private Coordinate emptySquare;
     private HashMap<Integer, Coordinate> goalState;
+    private GameBoard goalBoardState;
 
     public GameBoard(int[][] tiles){
         //Assume 0 denotes the empty square
@@ -129,6 +130,7 @@ public class GameBoard implements Comparable<GameBoard>{
         }
 
         goalState = new HashMap<>();
+        int[][] board = new int[dimension][dimension];
         int tileNum = 1;
 
         for(int i = 0; i < dimension; i++){
@@ -138,9 +140,11 @@ public class GameBoard implements Comparable<GameBoard>{
                 }
 
                 goalState.put(tileNum, new Coordinate(i, j));
+                board[i][j] = tileNum;
                 tileNum++;
             }
         }
+        goalBoardState = new GameBoard(board);
     }
 
     // sum of Manhattan distances between tiles and goal
@@ -170,16 +174,13 @@ public class GameBoard implements Comparable<GameBoard>{
     }
 
     public boolean isGoal(){
-        return hamming() == 0;
+        createGoalState();
+        return equals(goalBoardState);
     }
 
     @Override
     public int hashCode(){
-        /*
-         * Your code here
-         * TODO Ask David - What does this function do? Its purpose?
-         */
-        return 0;
+        return Arrays.deepHashCode(tiles);
     }
 
     @Override

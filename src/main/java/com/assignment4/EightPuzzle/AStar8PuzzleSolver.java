@@ -16,7 +16,7 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
 
     // You need to decide what data structure to use to store the visited nodes, either a 
     // Separate chaining hash table or a quadratic probing hash table.
-     private SeparateChainingHashTable visited;
+     private SeparateChainingHashTable<GameBoard> visited;
     
     public AStar8PuzzleSolver(GameBoard initial, GameBoard goal){
         this.initialBoardState = initial;
@@ -24,13 +24,13 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
         minPQ = new BinaryHeap<>();
         predecessors = new HashMap<>();
         solved = solvedStatus.NOT_EXECUTED;
-        // visited = new YourChoiceOfHashTable<>();
+        visited = new SeparateChainingHashTable<>();
     }
 
     public void printSolution(){
         if(solved == solvedStatus.SOLVED){
             for(GameBoard board : reconstructPath(current.board)){
-                System.out.println(board);
+                //System.out.println(board);
             }
         }
     }
@@ -49,19 +49,58 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
         return -1;
     }
 
-    public void solve(){
+    public void solve() {
        /*
        * Your code here 
        * Use the exploreNext method to explore the next node in the frontier until the queue is empty
        */
+        GameBoardPQEntry start = new GameBoardPQEntry(initialBoardState, 0);
+        minPQ.insert(start);
 
+        visited.insert(initialBoardState);
+
+        while(!minPQ.isEmpty()) {
+            exploreNext();
+            GameBoard currentBroadState = current.board;
+            if (currentBroadState.isGoal()) {
+                solved = solvedStatus.SOLVED;
+//                Iterable<GameBoard> iterable = reconstructPath(currentBroadState);
+                return;
+            }
+            //System.out.println("Current board:\n"+currentBroadState.toString());
+            //System.out.println("Hash code: "+currentBroadState.hashCode());
+
+            Iterable<GameBoardPQEntry> iterable = getNeighbours(current);
+            for (GameBoardPQEntry neighbour : iterable) {
+                //System.out.println("Not Visited: " + !visited.contains(neighbour.board));
+                if (!visited.contains(neighbour.board) || current.gScore < neighbour.gScore) {
+                    //System.out.println("Found neighbour to keep:\n"+neighbour.board.toString());
+                    //System.out.println("Hash code: "+neighbour.board.hashCode());
+                    visited.insert(neighbour.board);
+                    minPQ.insert(neighbour);
+                }
+            }
+        }
+        solved = solvedStatus.NOT_POSSIBLE;
     }
 
     //Explore the next node in the frontier according to the priority queue
-    private void exploreNext(){
-        /*
-         * Your code here
-         */
+    private void exploreNext() {
+        try {
+            current = minPQ.deleteMin();
+        } catch (BinaryHeap.UnderflowException e) {
+            //System.out.println(e);
+        }
+    }
+
+    private Iterable<GameBoardPQEntry> getNeighbours(GameBoardPQEntry current) {
+        Iterable<GameBoard> neighbourBoards = current.board.neighbors();
+        ArrayList<GameBoardPQEntry> neighbors = new ArrayList<>();
+
+        for (GameBoard board : neighbourBoards) {
+            neighbors.add(new GameBoardPQEntry(board, Integer.MAX_VALUE));
+        }
+        return neighbors;
     }
 
     private boolean solutionReached(){
@@ -94,7 +133,9 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
         public GameBoardPQEntry(GameBoard board, int gScore){
             this.board = board;
             this.gScore = gScore;
-            this.hScore = board.hamming();
+            // TODO Billy: Can change heuristic function here
+            // hamming vs. manhattan vs. both
+            this.hScore = board.manhattan();
             this.priority = gScore + hScore;
         }
 
