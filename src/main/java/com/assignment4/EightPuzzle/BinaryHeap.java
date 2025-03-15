@@ -2,7 +2,7 @@ package com.assignment4.EightPuzzle;
 
 public class BinaryHeap<T extends Comparable<? super T>>
 {
-    private static class UnderflowException extends Exception{
+    static class UnderflowException extends Exception{
         public UnderflowException(){
             super("Underflow Exception");
         }
@@ -90,7 +90,6 @@ public class BinaryHeap<T extends Comparable<? super T>>
         T minItem = getMin( );
         array[ 1 ] = array[ currentSize-- ];
         percolateDown( 1 );
-
         return minItem;
     }
 
@@ -139,7 +138,7 @@ public class BinaryHeap<T extends Comparable<? super T>>
 
     /**
      * Internal method to percolate down in the heap.
-     * @param hole the index at which the percolate begins.
+     * param hole the index at which to percolate begins.
      */
     private void percolateDown( int holeIndex )
     {
