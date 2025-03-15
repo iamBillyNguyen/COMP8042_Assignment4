@@ -16,7 +16,7 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
 
     // You need to decide what data structure to use to store the visited nodes, either a 
     // Separate chaining hash table or a quadratic probing hash table.
-    // private YourChoiceOfHashTable visited;
+     private SeparateChainingHashTable visited;
     
     public AStar8PuzzleSolver(GameBoard initial, GameBoard goal){
         this.initialBoardState = initial;
@@ -54,6 +54,7 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
        * Your code here 
        * Use the exploreNext method to explore the next node in the frontier until the queue is empty
        */
+
     }
 
     //Explore the next node in the frontier according to the priority queue

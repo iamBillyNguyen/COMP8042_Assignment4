@@ -32,6 +32,7 @@ public class QuickInsertionSort<T extends Comparable<T>> {
         /*
          * Your code here
          */
+        return 0;
     }
 
     //helper method
