@@ -84,6 +84,7 @@ public class GameBoard implements Comparable<GameBoard>{
                                            
     public String toString(){
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 sb.append(tiles[i][j] + " ");
