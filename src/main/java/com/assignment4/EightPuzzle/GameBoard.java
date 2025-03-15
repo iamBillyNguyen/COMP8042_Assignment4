@@ -122,10 +122,12 @@ public class GameBoard implements Comparable<GameBoard>{
     }
 
     /**
-     * Creates a goal state Hash Map containing correct coordinate for each tile
+     * Creates a goal state Hash Map and GameBoard object containing correct coordinate for each tile.
+     * This function also adopts singleton behaviour, which avoids re-creating objects if object already exists
      */
     public void createGoalState() {
-        // If goalState has already been created, skip
+        // If goalState has already been created,
+        // return which avoids re-creating the goal state again
         if (goalState != null) {
             return;
         }
