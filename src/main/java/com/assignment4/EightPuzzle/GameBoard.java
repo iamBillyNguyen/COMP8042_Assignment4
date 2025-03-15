@@ -2,7 +2,25 @@ package com.assignment4.EightPuzzle;
 
 import java.util.*;
 
-public class GameBoard implements Comparable<GameBoard>{ 
+public class GameBoard implements Comparable<GameBoard>{
+
+    @Override
+    public int compareTo(GameBoard other) {
+        if (dimension() != other.dimension()) {
+            return dimension() - other.dimension(); // Not equal in terms of dimensions
+        }
+
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
+                // If the current coordinate is different from goal's, tile is in the wrong position
+                if (other.tiles[i][j] != tiles[i][j]) {
+                    return -1; // Not equal in terms of tile values
+                }
+            }
+        }
+
+        return 0; // Boards are equal
+    }
 
     private static class Coordinate{
         private final int row;
@@ -18,6 +36,7 @@ public class GameBoard implements Comparable<GameBoard>{
     private final int dimension;
     //Useful to access the empty square in constant time
     private Coordinate emptySquare;
+    private HashMap<Integer, Coordinate> goalState;
 
     public GameBoard(int[][] tiles){
         //Assume 0 denotes the empty square
@@ -81,35 +100,86 @@ public class GameBoard implements Comparable<GameBoard>{
     public int hamming(){
         /*
          * Your code here
-         * The Hamming distance betweeen a board and the goal board is the number of tiles in the wrong position. 
+         * The Hamming distance between a board and the goal board is the number of tiles in the wrong position.
          */
+        int[][] board = getTiles();
+        int hamming = 0;
+        createGoalState();
+
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
+                int tile = board[i][j];
+                Coordinate currentCoordinate = goalState.get(tile);
+                // If the current coordinate is different from goal's, tile is in the wrong position
+                if (currentCoordinate.row != i || currentCoordinate.col != j) {
+                    hamming++;
+                }
+            }
+        }
+        return hamming;
+    }
+
+    /**
+     * Creates a goal state Hash Map containing correct coordinate for each tile
+     */
+    public void createGoalState() {
+        // If goalState has already been created, skip
+        if (goalState != null) {
+            return;
+        }
+
+        goalState = new HashMap<>();
+        int tileNum = 1;
+
+        for(int i = 0; i < dimension; i++){
+            for(int j = 0; j < dimension; j++) {
+                if (tileNum >= (dimension * dimension)) {
+                    tileNum = 0;
+                }
+
+                goalState.put(tileNum, new Coordinate(i, j));
+                tileNum++;
+            }
+        }
     }
 
     // sum of Manhattan distances between tiles and goal
     public int manhattan(){
-        /*
-         * Your code here
-         * The Manhattan distance between a board and the goal board is the sum of the Manhattan distances (sum of the vertical and horizontal distance) from the tiles to their goal positions.
-         */
+        int[][] board = getTiles();
+        int manhattan = 0;
 
+        // Creates a goal state based on the dimension of the current state
+        // to retrieve the difference in x and y coordinate
+        createGoalState();
+
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
+                int tile = board[i][j];
+                Coordinate currentCoordinate = goalState.get(tile);
+                // If the current coordinate is different from goal's, tile is in the wrong position
+                if (currentCoordinate.row != i || currentCoordinate.col != j) {
+                    manhattan += Math.abs(i - goalState.get(tile).row) + Math.abs(j - goalState.get(tile).col);
+                }
+            }
         }
+        return manhattan;
+    }
+
     public int manhattanPlusHamming(){
-        /*
-         * Your code here
-         */
+        return hamming() + manhattan();
     }
 
     public boolean isGoal(){
-        /*
-         * Your code here
-         */
+        return hamming() == 0;
     }
 
     @Override
     public int hashCode(){
         /*
          * Your code here
+         * TODO Ask David - What does this function do? Its purpose?
          */
+        return 0;
     }
 
     @Override
@@ -119,10 +189,9 @@ public class GameBoard implements Comparable<GameBoard>{
 
         GameBoard other = (GameBoard) obj;
         if (dimension != other.dimension) return false;
-        
-        /*
-         * Your code here
-         */
+
+        int boardComparison = this.compareTo(other);
+        if (boardComparison != 0) return false;
         return true;
     }
 

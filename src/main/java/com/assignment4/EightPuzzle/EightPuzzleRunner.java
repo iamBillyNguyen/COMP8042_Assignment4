@@ -23,15 +23,18 @@ public class EightPuzzleRunner {
         });
 
         AStar8PuzzleSolver solver = new AStar8PuzzleSolver(initialState, goalState);
-        solver.solve();
-
-        if(solver.status() == AStar8PuzzleSolver.solvedStatus.NOT_POSSIBLE) {
-            System.out.println("No solution found.");
-        } 
-        else {
-            System.out.println("Solution found:");
-            //This should print out the set of board states that lead to the solution
-            solver.printSolution();
-        }
+        System.out.println("State:\n"+initialState.toString());
+        System.out.println("Hamming: "+initialState.hamming());
+        System.out.println("Manhattan: "+initialState.manhattan());
+//        solver.solve();
+//
+//        if(solver.status() == AStar8PuzzleSolver.solvedStatus.NOT_POSSIBLE) {
+//            System.out.println("No solution found.");
+//        }
+//        else {
+//            System.out.println("Solution found:");
+//            //This should print out the set of board states that lead to the solution
+//            solver.printSolution();
+//        }
     }
 }
