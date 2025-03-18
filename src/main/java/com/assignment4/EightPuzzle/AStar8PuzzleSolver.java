@@ -16,6 +16,7 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
 
     // You need to decide what data structure to use to store the visited nodes, either a 
     // Separate chaining hash table or a quadratic probing hash table.
+    // TODO - Billy: Explain why?
      private SeparateChainingHashTable<GameBoard> visited;
     
     public AStar8PuzzleSolver(GameBoard initial, GameBoard goal){
@@ -73,6 +74,7 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
             Iterable<GameBoardPQEntry> iterable = getNeighbours(current);
             for (GameBoardPQEntry neighbour : iterable) {
                 //System.out.println("Not Visited: " + !visited.contains(neighbour.board));
+                // TODO - Billy: Verify current.gScore < neighbour.gScore . Is it correct?
                 if (!visited.contains(neighbour.board) || current.gScore < neighbour.gScore) {
                     //System.out.println("Found neighbour to keep:\n"+neighbour.board.toString());
                     //System.out.println("Hash code: "+neighbour.board.hashCode());
@@ -133,7 +135,7 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
         public GameBoardPQEntry(GameBoard board, int gScore){
             this.board = board;
             this.gScore = gScore;
-            // TODO Billy: Can change heuristic function here
+            // TODO Billy: Can change heuristic function here. Explain why?
             // hamming vs. manhattan vs. both
             this.hScore = board.manhattan();
             this.priority = gScore + hScore;
