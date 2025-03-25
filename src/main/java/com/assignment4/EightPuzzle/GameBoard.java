@@ -81,7 +81,15 @@ public class GameBoard implements Comparable<GameBoard>{
     public int[][] getTiles(){
         return tiles;
     }
-                                           
+
+    public int getEmptyTileRow() {
+        return emptySquare.row;
+    }
+
+    public int getEmptyTileColumn() {
+        return emptySquare.col;
+    }
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
@@ -121,30 +129,47 @@ public class GameBoard implements Comparable<GameBoard>{
         return hamming;
     }
 
+    // Retrieve available tile numbers in the current board
+    // Tile numbers can be randomized
+    public ArrayList<Integer> getTileNumbers(){
+        ArrayList<Integer> result = new ArrayList<>();
+        for(int i = 0; i < dimension; i++){
+            for(int j = 0; j < dimension; j++) {
+                // Skip tile 0 from being added
+                if (tiles[i][j] == 0) {
+                    continue;
+                }
+                result.add(tiles[i][j]);
+            }
+        }
+        // Sort the list in ascending order for faster assignment
+        Collections.sort(result);
+        // Add 0 to the last index
+        result.add(0);
+        return result;
+    }
+
     /**
      * Creates a goal state Hash Map and GameBoard object containing correct coordinate for each tile.
      * This function also adopts singleton behaviour, which avoids re-creating objects if object already exists
      */
     public void createGoalState() {
         // If goalState has already been created,
-        // return which avoids re-creating the goal state again
+        // return to avoid re-creating the goal state again
         if (goalState != null) {
             return;
         }
 
         goalState = new HashMap<>();
         int[][] board = new int[dimension][dimension];
-        int tileNum = 1;
+        ArrayList<Integer> tileNumbers = getTileNumbers();
+        int counter = 0;
 
         for(int i = 0; i < dimension; i++){
             for(int j = 0; j < dimension; j++) {
-                if (tileNum >= (dimension * dimension)) {
-                    tileNum = 0;
-                }
-
-                goalState.put(tileNum, new Coordinate(i, j));
-                board[i][j] = tileNum;
-                tileNum++;
+                goalState.put(tileNumbers.get(counter), new Coordinate(i, j));
+                board[i][j] = tileNumbers.get(counter);
+                counter++;
             }
         }
         goalBoardState = new GameBoard(board);
