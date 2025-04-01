@@ -1,14 +1,24 @@
 package com.assignment4.Sorting;
 
+import java.util.Arrays;
+
 public class InsertionSort<T extends Comparable<T>> {
     static int insertCount = 0;
 
     // Given a start and end index, sort the array from the start index to the end index
     public void insertionSort(T[] arr, int startIndex, int endIndex) {
         insertCount++;
-        /*
-         * Your code here
-         */
+        for (int i = startIndex; i <= endIndex; ++i) {
+            T key = arr[i];
+            int j = binarySearch(arr, key, 0, i - 1);
+
+            // Shift elements to make space for key
+            for (int k = i - 1; k >= j; k--) {
+                arr[k + 1] = arr[k];
+            }
+            arr[j] = key;
+        }
+        System.out.println("insertCount: "+insertCount);
     }
 
 
