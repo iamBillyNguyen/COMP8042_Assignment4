@@ -3,11 +3,11 @@ package com.assignment4.EightPuzzle;
 public class EightPuzzleRunner {
     public static void main(String[] args) {
         
-        // GameBoard initialState = new GameBoard(new int[][] {
-        //     {8, 4, 5},
-        //     {2, 0, 3},
-        //     {7, 1, 6}
-        // });
+//         GameBoard initialState = new GameBoard(new int[][] {
+//             {8, 4, 5},
+//             {2, 0, 3},
+//             {7, 1, 6}
+//         });
 
         GameBoard initialState = new GameBoard(new int[][] {
             {2, 3, 0},
@@ -23,10 +23,10 @@ public class EightPuzzleRunner {
         });
 
         AStar8PuzzleSolver solver = new AStar8PuzzleSolver(initialState, goalState);
-        System.out.println("State:\n"+initialState.toString());
-        System.out.println("Hamming: "+initialState.hamming());
-        System.out.println("Manhattan: "+initialState.manhattan());
         solver.solve();
+
+        // Bonus 1 Runner
+//        solver.solveWithRandom();
 
         if(solver.status() == AStar8PuzzleSolver.solvedStatus.NOT_POSSIBLE) {
             System.out.println("No solution found.");
@@ -36,5 +36,9 @@ public class EightPuzzleRunner {
             //This should print out the set of board states that lead to the solution
             solver.printSolution();
         }
+
+        // Bonus 2 Runner
+        solver.movesToString();
+        System.out.println("Num moves: "+solver.numberMoves());
     }
 }
