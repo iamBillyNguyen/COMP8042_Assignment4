@@ -36,5 +36,14 @@ public class LineSegment {
     public int hashCode() {
         throw new UnsupportedOperationException("hashCode() is not supported");
     }
+
+    /**
+     * Check if the two LineSegment objects are equal to each other by comparing their first and second points against each other.
+     * @param lineSegment the other LineSegment object to be compared
+     * @return true or false
+     */
+    public boolean isEqual(LineSegment lineSegment) {
+        return (p.compareTo(lineSegment.p) == 0 && q.compareTo(lineSegment.q) == 0) || (p.compareTo(lineSegment.q) == 0 && q.compareTo(lineSegment.p) == 0);
+    }
 }
 

@@ -14,8 +14,8 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
     private GameBoardPQEntry current;
     private solvedStatus solved;
 
-    // Use SeparateChainingHashTable because it handles collision well
-    // and is simple to use for this problem
+    // Reason: Use SeparateChainingHashTable because it handles collision well
+    // and is simple to use for this problem. (More details can be found in pdf)
     private SeparateChainingHashTable<GameBoard> visited;
     
     public AStar8PuzzleSolver(GameBoard initial, GameBoard goal){
@@ -224,7 +224,8 @@ public class AStar8PuzzleSolver implements EightPuzzleSolver{
         public GameBoardPQEntry(GameBoard board, int gScore){
             this.board = board;
             this.gScore = gScore;
-            // Use manhattan heuristic function since it is better at underestimating the shortest path
+            // Reason: Use manhattan heuristic function since it is consistent and accurate, more likely to
+            // provide an optimal path to the goal state. (More details can be found in pdf)
             this.hScore = board.manhattan();
             this.priority = gScore + hScore;
         }

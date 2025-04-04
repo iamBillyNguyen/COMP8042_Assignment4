@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ColinearRunner {
     public static void main(String[] args) {
-        Point[] points = PointsReader.readPoints("data/points40.txt");
+        Point[] points = PointsReader.readPoints("data/points15.txt");
 
         BruteForceColinear brute = new BruteForceColinear(points);
         FastColinear fast = new FastColinear(points);

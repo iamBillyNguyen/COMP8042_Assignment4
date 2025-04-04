@@ -1,7 +1,5 @@
 package com.assignment4.Sorting;
 
-import java.util.Arrays;
-
 public class InsertionSort<T extends Comparable<T>> {
     static int insertCount = 0;
 
@@ -10,6 +8,7 @@ public class InsertionSort<T extends Comparable<T>> {
         insertCount++;
         for (int i = startIndex; i <= endIndex; ++i) {
             T key = arr[i];
+            // Use binary search to find the correct index to insert element
             int j = binarySearch(arr, key, 0, i - 1);
 
             // Shift elements to make space for key
@@ -18,7 +17,6 @@ public class InsertionSort<T extends Comparable<T>> {
             }
             arr[j] = key;
         }
-        System.out.println("insertCount: "+insertCount);
     }
 
 

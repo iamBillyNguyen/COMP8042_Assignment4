@@ -52,7 +52,7 @@ public class Point implements Comparable<Point> {
      * Double.POSITIVE_INFINITY if the line segment is vertical;
      * and Double.NEGATIVE_INFINITY if (x0, y0) and (x1, y1) are equal.
      *
-     * @param  that the other point
+     * @param that the other point
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point other) {
